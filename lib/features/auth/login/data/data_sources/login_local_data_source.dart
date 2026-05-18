@@ -6,4 +6,6 @@ abstract interface class LoginLocalDataSource {
   Future<void> saveRememberMe(bool rememberMe);
 
   Future<bool> getRememberMe();
+
+  Future<void> cacheUserData(Map<String, dynamic> userJson);
 }

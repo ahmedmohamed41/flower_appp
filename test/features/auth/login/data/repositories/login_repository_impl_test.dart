@@ -3,6 +3,7 @@ import 'package:flower_appp/core/values/app_strings.dart';
 import 'package:flower_appp/features/auth/login/data/data_sources/login_local_data_source.dart';
 import 'package:flower_appp/features/auth/login/data/data_sources/login_remote_data_source.dart';
 import 'package:flower_appp/features/auth/login/data/models/login_response/login_response.dart';
+import 'package:flower_appp/features/auth/login/data/models/user_dto.dart';
 import 'package:flower_appp/features/auth/login/data/repo/login_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -30,6 +31,7 @@ class _FakeLoginLocalDataSource implements LoginLocalDataSource {
   String? receivedToken;
   bool rememberMe = false;
   bool didClearToken = false;
+  Map<String, dynamic>? cachedUserData;
 
   @override
   Future<void> saveToken(String token) async {
@@ -49,6 +51,11 @@ class _FakeLoginLocalDataSource implements LoginLocalDataSource {
 
   @override
   Future<bool> getRememberMe() async => rememberMe;
+
+  @override
+  Future<void> cacheUserData(Map<String, dynamic> userJson) async {
+    cachedUserData = userJson;
+  }
 }
 
 void main() {
@@ -83,7 +90,30 @@ void main() {
       },
     );
 
-    test('clears token when remember me is disabled', () async {
+    test('caches user data on successful login', () async {
+      final loginResponse = LoginResponse(
+        message: 'success',
+        token: 'token',
+        user: User(email: 'test@mail.com', firstName: 'Ahmed', photo: 'photo_url'),
+      );
+      final remoteDataSource = _FakeLoginRemoteDataSource()
+        ..response = loginResponse;
+      final localDataSource = _FakeLoginLocalDataSource();
+      final repository = LoginRepositoryImpl(remoteDataSource, localDataSource);
+
+      await repository.login(
+        email: 'test@mail.com',
+        password: 'password123',
+        rememberMe: true,
+      );
+
+      expect(localDataSource.cachedUserData, {
+        'user_email': 'test@mail.com',
+        'user_name': 'Ahmed',
+        'user_photo': 'photo_url',
+      });
+    });
+
       final loginResponse = LoginResponse(message: 'success', token: 'token');
       final remoteDataSource = _FakeLoginRemoteDataSource()
         ..response = loginResponse;

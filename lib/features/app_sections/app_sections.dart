@@ -4,7 +4,7 @@ import 'package:flower_appp/core/values/assets.gen.dart';
 import 'package:flower_appp/features/app_sections/cart/cart_view.dart';
 import 'package:flower_appp/features/app_sections/categories/categories_view.dart';
 import 'package:flower_appp/features/app_sections/home/home_view.dart';
-import 'package:flower_appp/features/app_sections/profile/profile_view.dart';
+import 'package:flower_appp/features/app_sections/profile/presentation/view/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

@@ -28,4 +28,11 @@ class LoginLocalDataSourceImpl implements LoginLocalDataSource {
   Future<bool> getRememberMe() {
     return _securityStorage.getSecuredBool(ApiParam.rememberMe);
   }
+
+  @override
+  Future<void> cacheUserData(Map<String, dynamic> userJson) async {
+    await _securityStorage.setSecuredString('user_email', userJson['user_email'] ?? '');
+    await _securityStorage.setSecuredString('user_name', userJson['user_name'] ?? '');
+    await _securityStorage.setSecuredString('user_photo', userJson['user_photo'] ?? '');
+  }
 }

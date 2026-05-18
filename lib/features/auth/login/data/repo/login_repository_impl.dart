@@ -33,6 +33,11 @@ class LoginRepositoryImpl implements LoginRepository {
         await _localDataSource.clearToken();
       }
       await _localDataSource.saveRememberMe(rememberMe);
+      await _localDataSource.cacheUserData({
+        'user_email': response.user!.email ?? '',
+        'user_name': response.user!.firstName ?? '',
+        'user_photo': response.user!.photo ?? '',
+      });
       return SuccessBaseResponse(data: response);
     } catch (error) {
       return ErrorBaseResponse(
