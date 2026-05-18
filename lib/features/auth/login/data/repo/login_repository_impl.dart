@@ -19,6 +19,7 @@ class LoginRepositoryImpl implements LoginRepository {
   Future<BaseResponse<LoginResponse>> login({
     required String email,
     required String password,
+    required bool rememberMe,
   }) async {
     try {
       final response = await _remoteDataSource.login(email, password);
@@ -26,7 +27,12 @@ class LoginRepositoryImpl implements LoginRepository {
       if (token == null || token.isEmpty) {
         throw CacheException(errorMessage: AppStrings.cacheStorageError);
       }
-      await _localDataSource.saveToken(token);
+      if (rememberMe) {
+        await _localDataSource.saveToken(token);
+      } else {
+        await _localDataSource.clearToken();
+      }
+      await _localDataSource.saveRememberMe(rememberMe);
       return SuccessBaseResponse(data: response);
     } catch (error) {
       return ErrorBaseResponse(
@@ -35,5 +41,10 @@ class LoginRepositoryImpl implements LoginRepository {
             : ServerFailure.failureHandler(error).errorMessage,
       );
     }
+  }
+
+  @override
+  Future<bool> getRememberMe() {
+    return _localDataSource.getRememberMe();
   }
 }

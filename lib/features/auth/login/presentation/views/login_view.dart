@@ -25,6 +25,12 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    context.read<LoginCubit>().loadRememberMe();
+  }
+
+  @override
   void dispose() {
     AppLoading.toggle(context: context, isLoading: false);
     _emailController.dispose();
@@ -65,10 +71,26 @@ class _LoginViewState extends State<LoginView> {
                     children: [
                       Row(
                         children: [
-                          Checkbox(
-                            value: false,
-                            onChanged: (value) {},
-                            checkColor: AppColors.placeHolderColor,
+                          BlocBuilder<LoginCubit, LoginState>(
+                            buildWhen: (previous, current) =>
+                                previous.rememberMe != current.rememberMe ||
+                                (previous is LoginLoading) !=
+                                    (current is LoginLoading),
+                            builder: (context, state) {
+                              return Checkbox(
+                                value: state.rememberMe,
+                                onChanged: state is LoginLoading
+                                    ? null
+                                    : context
+                                          .read<LoginCubit>()
+                                          .toggleRememberMe,
+                                checkColor: AppColors.placeHolderColor,
+                                side: const BorderSide(
+                                  color: AppColors.placeHolderColor,
+                                  width: 2.0,
+                                ),
+                              );
+                            },
                           ),
                           Text(
                             AppStrings.rememberMe,

@@ -28,11 +28,27 @@ class _FakeLoginRemoteDataSource implements LoginRemoteDataSource {
 
 class _FakeLoginLocalDataSource implements LoginLocalDataSource {
   String? receivedToken;
+  bool rememberMe = false;
+  bool didClearToken = false;
 
   @override
   Future<void> saveToken(String token) async {
     receivedToken = token;
   }
+
+  @override
+  Future<void> clearToken() async {
+    receivedToken = null;
+    didClearToken = true;
+  }
+
+  @override
+  Future<void> saveRememberMe(bool rememberMe) async {
+    this.rememberMe = rememberMe;
+  }
+
+  @override
+  Future<bool> getRememberMe() async => rememberMe;
 }
 
 void main() {
@@ -52,6 +68,7 @@ void main() {
         final result = await repository.login(
           email: 'user@mail.com',
           password: 'password123',
+          rememberMe: true,
         );
 
         expect(remoteDataSource.receivedEmail, 'user@mail.com');
@@ -62,8 +79,27 @@ void main() {
           loginResponse,
         );
         expect(localDataSource.receivedToken, 'token');
+        expect(localDataSource.rememberMe, isTrue);
       },
     );
+
+    test('clears token when remember me is disabled', () async {
+      final loginResponse = LoginResponse(message: 'success', token: 'token');
+      final remoteDataSource = _FakeLoginRemoteDataSource()
+        ..response = loginResponse;
+      final localDataSource = _FakeLoginLocalDataSource();
+      final repository = LoginRepositoryImpl(remoteDataSource, localDataSource);
+
+      final result = await repository.login(
+        email: 'user@mail.com',
+        password: 'password123',
+        rememberMe: false,
+      );
+
+      expect(result, isA<SuccessBaseResponse<LoginResponse>>());
+      expect(localDataSource.didClearToken, isTrue);
+      expect(localDataSource.rememberMe, isFalse);
+    });
 
     test('returns error response when remote data source throws', () async {
       final remoteDataSource = _FakeLoginRemoteDataSource()
@@ -74,6 +110,7 @@ void main() {
       final result = await repository.login(
         email: 'user@mail.com',
         password: 'password123',
+        rememberMe: false,
       );
 
       expect(result, isA<ErrorBaseResponse<LoginResponse>>());
@@ -93,6 +130,7 @@ void main() {
       final result = await repository.login(
         email: 'user@mail.com',
         password: 'password123',
+        rememberMe: false,
       );
 
       expect(result, isA<ErrorBaseResponse<LoginResponse>>());

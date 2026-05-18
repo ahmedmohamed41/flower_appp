@@ -13,4 +13,19 @@ class LoginLocalDataSourceImpl implements LoginLocalDataSource {
   Future<void> saveToken(String token) {
     return _securityStorage.setSecuredString(ApiParam.token, token);
   }
+
+  @override
+  Future<void> clearToken() {
+    return _securityStorage.deleteSecuredString(ApiParam.token);
+  }
+
+  @override
+  Future<void> saveRememberMe(bool rememberMe) {
+    return _securityStorage.setSecuredBool(ApiParam.rememberMe, rememberMe);
+  }
+
+  @override
+  Future<bool> getRememberMe() {
+    return _securityStorage.getSecuredBool(ApiParam.rememberMe);
+  }
 }

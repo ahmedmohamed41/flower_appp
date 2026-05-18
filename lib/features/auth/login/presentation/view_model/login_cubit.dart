@@ -14,24 +14,68 @@ class LoginCubit extends Cubit<LoginState> {
   void togglePasswordVisibility() {
     if (state is LoginLoading) return;
 
-    emit(LoginInitial(obscurePassword: !state.obscurePassword));
+    emit(
+      LoginInitial(
+        obscurePassword: !state.obscurePassword,
+        rememberMe: state.rememberMe,
+      ),
+    );
+  }
+
+  Future<void> loadRememberMe() async {
+    final rememberMe = await _loginUseCase.getRememberMe();
+
+    emit(
+      LoginInitial(
+        obscurePassword: state.obscurePassword,
+        rememberMe: rememberMe,
+      ),
+    );
+  }
+
+  void toggleRememberMe(bool? value) {
+    if (state is LoginLoading) return;
+
+    emit(
+      LoginInitial(
+        obscurePassword: state.obscurePassword,
+        rememberMe: value ?? false,
+      ),
+    );
   }
 
   Future<void> login({required String email, required String password}) async {
     if (state is LoginLoading) return;
 
     final obscurePassword = state.obscurePassword;
+    final rememberMe = state.rememberMe;
 
-    emit(LoginLoading(obscurePassword: obscurePassword));
+    emit(
+      LoginLoading(obscurePassword: obscurePassword, rememberMe: rememberMe),
+    );
 
-    final result = await _loginUseCase(email: email, password: password);
+    final result = await _loginUseCase(
+      email: email,
+      password: password,
+      rememberMe: rememberMe,
+    );
 
     switch (result) {
       case SuccessBaseResponse<LoginResponse>():
-        emit(LoginSuccess(result.data, obscurePassword: obscurePassword));
+        emit(
+          LoginSuccess(
+            result.data,
+            obscurePassword: obscurePassword,
+            rememberMe: rememberMe,
+          ),
+        );
       case ErrorBaseResponse<LoginResponse>():
         emit(
-          LoginFailure(result.errorMessage, obscurePassword: obscurePassword),
+          LoginFailure(
+            result.errorMessage,
+            obscurePassword: obscurePassword,
+            rememberMe: rememberMe,
+          ),
         );
     }
   }
