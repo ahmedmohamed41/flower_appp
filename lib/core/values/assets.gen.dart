@@ -21,6 +21,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/Logo.svg
   String get logo => 'assets/icons/Logo.svg';
 
+  /// File path: assets/icons/Transaction-order (交易清单).svg
+  String get transactionOrder => 'assets/icons/Transaction-order (交易清单).svg';
+
   /// File path: assets/icons/add_icon.svg
   String get addIcon => 'assets/icons/add_icon.svg';
 
@@ -110,6 +113,9 @@ class $AssetsIconsGen {
   String get motorcycleDeliveryIcon =>
       'assets/icons/motorcycle_delivery_icon.svg';
 
+  /// File path: assets/icons/noto-v1_pen.svg
+  String get notoV1Pen => 'assets/icons/noto-v1_pen.svg';
+
   /// File path: assets/icons/payments_icon.svg
   String get paymentsIcon => 'assets/icons/payments_icon.svg';
 
@@ -163,6 +169,7 @@ class $AssetsIconsGen {
     alarmClockIcon,
     checklistIcon,
     logo,
+    transactionOrder,
     addIcon,
     addressIcon,
     arrowBackIcon,
@@ -192,6 +199,7 @@ class $AssetsIconsGen {
     logout2Icon,
     logoutIcon,
     motorcycleDeliveryIcon,
+    notoV1Pen,
     paymentsIcon,
     personIcon,
     photoCameraIcon,

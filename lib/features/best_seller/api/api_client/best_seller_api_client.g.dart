@@ -20,12 +20,12 @@ class _BestSellerApiClient implements BestSellerApiClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<BestSellerResponse> getBestSellers() async {
+  Future<BestSellerDto> getBestSellers() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<BestSellerResponse>(
+    final _options = _setStreamType<BestSellerDto>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -36,9 +36,9 @@ class _BestSellerApiClient implements BestSellerApiClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BestSellerResponse _value;
+    late BestSellerDto _value;
     try {
-      _value = BestSellerResponse.fromJson(_result.data!);
+      _value = BestSellerDto.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

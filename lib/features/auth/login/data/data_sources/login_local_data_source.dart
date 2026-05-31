@@ -1,6 +1,5 @@
 abstract interface class LoginLocalDataSource {
   Future<void> saveToken(String token);
-
   Future<void> clearToken();
 
   Future<void> saveRememberMe(bool rememberMe);

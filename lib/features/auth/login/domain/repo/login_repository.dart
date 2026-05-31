@@ -7,6 +7,5 @@ abstract class LoginRepository {
     required String password,
     required bool rememberMe,
   });
-
   Future<bool> getRememberMe();
 }

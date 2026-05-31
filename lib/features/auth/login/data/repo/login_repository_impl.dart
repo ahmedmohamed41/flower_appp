@@ -1,12 +1,15 @@
 import 'package:flower_appp/config/base_response/base_response.dart';
 import 'package:flower_appp/core/errors/exceptions.dart';
 import 'package:flower_appp/core/errors/failures.dart';
-import 'package:flower_appp/core/values/app_strings.dart';
+import 'package:flower_appp/core/values/api_param.dart';
 import 'package:flower_appp/features/auth/login/data/data_sources/login_local_data_source.dart';
 import 'package:flower_appp/features/auth/login/data/data_sources/login_remote_data_source.dart';
 import 'package:flower_appp/features/auth/login/data/models/login_response/login_response.dart';
 import 'package:flower_appp/features/auth/login/domain/repo/login_repository.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../../../../core/router/app_router.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 @Injectable(as: LoginRepository)
 class LoginRepositoryImpl implements LoginRepository {
@@ -25,18 +28,22 @@ class LoginRepositoryImpl implements LoginRepository {
       final response = await _remoteDataSource.login(email, password);
       final token = response.token;
       if (token == null || token.isEmpty) {
-        throw CacheException(errorMessage: AppStrings.cacheStorageError);
+        throw CacheException(
+          errorMessage: AppLocalizations.of(
+            navigatorKey.currentContext!,
+          )!.cacheStorageError,
+        );
       }
-      if (rememberMe) {
-        await _localDataSource.saveToken(token);
-      } else {
-        await _localDataSource.clearToken();
-      }
+      await _localDataSource.saveToken(token);
       await _localDataSource.saveRememberMe(rememberMe);
+      final user = response.user;
+
       await _localDataSource.cacheUserData({
-        'user_email': response.user!.email ?? '',
-        'user_name': response.user!.firstName ?? '',
-        'user_photo': response.user!.photo ?? '',
+        ApiParam.userEmail: user?.email ?? email,
+        ApiParam.userName: user?.firstName ?? 'User',
+        ApiParam.userPhoto:
+            user?.photo ??
+            'https://imgs.search.brave.com/2IB7Irk4sEHgNdKDJmVoI-PU8O8sgZHGf_Rcsk4Oe34/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9jZG4u/Y3JlYXRlLnZpc3Rh/LmNvbS9hcGkvbWVk/aWEvc21hbGwvNDE0/MzgyNDU4L3N0b2Nr/LXZlY3Rvci1waWN0/dXJlLXByb2ZpbGUt/aWNvbi1tYWxlLWlj/b24taHVtYW4tcGVv/cGxlLXNpZ24tc3lt/Ym9sLXZlY3Rvcg',
       });
       return SuccessBaseResponse(data: response);
     } catch (error) {

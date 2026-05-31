@@ -1,12 +1,21 @@
+import 'package:flower_appp/config/di/di.dart';
 import 'package:flower_appp/core/theme/app_colors.dart';
-import 'package:flower_appp/core/values/app_strings.dart';
+
 import 'package:flower_appp/core/values/assets.gen.dart';
-import 'package:flower_appp/features/app_sections/cart/cart_view.dart';
-import 'package:flower_appp/features/app_sections/categories/categories_view.dart';
-import 'package:flower_appp/features/app_sections/home/home_view.dart';
+import 'package:flower_appp/features/app_sections/cart/presentation/views/cart_view.dart';
+import 'package:flower_appp/features/app_sections/categories/presentation/views/categories_view.dart';
 import 'package:flower_appp/features/app_sections/profile/presentation/view/profile_view.dart';
+import 'package:flower_appp/features/app_sections/profile/presentation/view_model/cubit/profile_cubit.dart';
+import 'package:flower_appp/features/app_sections/profile/presentation/view_model/intent/profile_intent.dart';
+import 'package:flower_appp/features/change_password/presentation/view/change_password_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../config/di/di.dart';
+import '../../l10n/app_localizations.dart';
+import '../change_password/presentation/view_model/cubit/change_password_cubit.dart';
+import 'home/presentation/view/home_view.dart';
 
 class AppSections extends StatefulWidget {
   const AppSections({super.key});
@@ -18,26 +27,34 @@ class AppSections extends StatefulWidget {
 class _AppSectionsState extends State<AppSections> {
   int _currentIndex = 0;
 
-  static final _sections = [
+  List<_AppSection> get _sections => [
     _AppSection(
-      label: AppStrings.home,
+      label: AppLocalizations.of(context)!.home,
       iconPath: Assets.icons.home2Icon,
-      screen: HomeView(),
+      screen: HomeView(
+        onViewAllCategories: () {
+          setState(() => _currentIndex = 1);
+        },
+      ),
     ),
     _AppSection(
-      label: AppStrings.categories,
+      label: AppLocalizations.of(context)!.categories,
       iconPath: Assets.icons.categoryIcon,
-      screen: CategoriesView(),
+      screen: const CategoriesView(),
     ),
     _AppSection(
-      label: AppStrings.cart,
+      label: AppLocalizations.of(context)!.cart,
       iconPath: Assets.icons.shoppingCartIcon,
-      screen: CartView(),
+      screen: const CartView(),
     ),
     _AppSection(
-      label: AppStrings.profile,
+      label: AppLocalizations.of(context)!.profile,
       iconPath: Assets.icons.personIcon,
-      screen: ProfileView(),
+      //will be removed after merging
+      screen: BlocProvider(
+        create: (_) => getIt<ProfileCubit>()..doIntent(LoadUserProfileIntent()),
+        child: const ProfileView(),
+      ),
     ),
   ];
 

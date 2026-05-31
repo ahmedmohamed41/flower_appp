@@ -15,13 +15,24 @@ class LoginLocalDataSourceImpl implements LoginLocalDataSource {
   }
 
   @override
-  Future<void> clearToken() {
-    return _securityStorage.deleteSecuredString(ApiParam.token);
+  Future<void> cacheUserData(Map<String, dynamic> userJson) async {
+    await _securityStorage.setSecuredString(
+      ApiParam.userEmail,
+      userJson[ApiParam.userEmail] ?? '',
+    );
+    await _securityStorage.setSecuredString(
+      ApiParam.userName,
+      userJson[ApiParam.userName] ?? '',
+    );
+    await _securityStorage.setSecuredString(
+      ApiParam.userPhoto,
+      userJson[ApiParam.userPhoto] ?? '',
+    );
   }
 
   @override
-  Future<void> saveRememberMe(bool rememberMe) {
-    return _securityStorage.setSecuredBool(ApiParam.rememberMe, rememberMe);
+  Future<void> clearToken() {
+    return _securityStorage.deleteSecuredString(ApiParam.token);
   }
 
   @override
@@ -30,9 +41,7 @@ class LoginLocalDataSourceImpl implements LoginLocalDataSource {
   }
 
   @override
-  Future<void> cacheUserData(Map<String, dynamic> userJson) async {
-    await _securityStorage.setSecuredString('user_email', userJson['user_email'] ?? '');
-    await _securityStorage.setSecuredString('user_name', userJson['user_name'] ?? '');
-    await _securityStorage.setSecuredString('user_photo', userJson['user_photo'] ?? '');
+  Future<void> saveRememberMe(bool rememberMe) {
+    return _securityStorage.setSecuredBool(ApiParam.rememberMe, rememberMe);
   }
 }

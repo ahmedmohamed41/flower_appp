@@ -2,12 +2,14 @@ import 'package:flower_appp/core/router/router_paths.dart';
 import 'package:flower_appp/core/theme/app_colors.dart';
 import 'package:flower_appp/core/theme/app_text_styles.dart';
 import 'package:flower_appp/core/utilities/app_validators.dart';
-import 'package:flower_appp/core/values/app_strings.dart';
+
 import 'package:flower_appp/core/widgets/app_loading.dart';
 import 'package:flower_appp/core/widgets/app_messages.dart';
 import 'package:flower_appp/core/widgets/custom_app_bar.dart';
-import 'package:flower_appp/features/auth/login/presentation/view_model/login_cubit.dart';
-import 'package:flower_appp/features/auth/login/presentation/view_model/login_states.dart';
+import 'package:flower_appp/features/auth/login/presentation/view_model/cubit/login_cubit.dart';
+import 'package:flower_appp/features/auth/login/presentation/view_model/intent/login_intent.dart';
+import 'package:flower_appp/features/auth/login/presentation/view_model/state/login_states.dart';
+import 'package:flower_appp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +29,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
-    context.read<LoginCubit>().loadRememberMe();
+    context.read<LoginCubit>().doIntent(LoadRememberMeIntent());
   }
 
   @override
@@ -44,7 +46,10 @@ class _LoginViewState extends State<LoginView> {
       listener: _loginListener,
       child: Scaffold(
         backgroundColor: AppColors.whiteColor,
-        appBar: CustomAppBar(title: AppStrings.login),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context)!.login,
+          hasBackButton: false,
+        ),
         body: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -56,9 +61,9 @@ class _LoginViewState extends State<LoginView> {
                     controller: _emailController,
                     validator: AppValidators.validateEmail,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      hintText: AppStrings.email,
-                      labelText: AppStrings.email,
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.email,
+                      labelText: AppLocalizations.of(context)!.email,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -81,9 +86,10 @@ class _LoginViewState extends State<LoginView> {
                                 value: state.rememberMe,
                                 onChanged: state is LoginLoading
                                     ? null
-                                    : context
-                                          .read<LoginCubit>()
-                                          .toggleRememberMe,
+                                    : (value) =>
+                                          context.read<LoginCubit>().doIntent(
+                                            ToggleRememberMeIntent(value),
+                                          ),
                                 checkColor: AppColors.placeHolderColor,
                                 side: const BorderSide(
                                   color: AppColors.placeHolderColor,
@@ -93,7 +99,7 @@ class _LoginViewState extends State<LoginView> {
                             },
                           ),
                           Text(
-                            AppStrings.rememberMe,
+                            AppLocalizations.of(context)!.rememberMe,
                             style: AppTextStyles.textStyleRegular13,
                           ),
                         ],
@@ -101,7 +107,7 @@ class _LoginViewState extends State<LoginView> {
                       InkWell(
                         onTap: () {},
                         child: Text(
-                          AppStrings.forgetPassword,
+                          AppLocalizations.of(context)!.forgetPassword,
                           style: AppTextStyles.textStyleRegular12.copyWith(
                             decoration: TextDecoration.underline,
                           ),
@@ -122,7 +128,7 @@ class _LoginViewState extends State<LoginView> {
                                     ? null
                                     : () => _submitLogin(context),
                                 child: Text(
-                                  AppStrings.login,
+                                  AppLocalizations.of(context)!.login,
                                   style: AppTextStyles.textStyleMedium16,
                                 ),
                               );
@@ -136,8 +142,8 @@ class _LoginViewState extends State<LoginView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        AppStrings.doNotHaveAnAccount,
+                      Text(
+                        AppLocalizations.of(context)!.doNotHaveAnAccount,
                         style: AppTextStyles.textStyleRegular16,
                       ),
                       InkWell(
@@ -145,7 +151,7 @@ class _LoginViewState extends State<LoginView> {
                           GoRouter.of(context).push(AppRouterPaths.kSignUpView);
                         },
                         child: Text(
-                          AppStrings.signUp,
+                          AppLocalizations.of(context)!.signUp,
                           style: AppTextStyles.textStyleMedium16.copyWith(
                             decoration: TextDecoration.underline,
                             color: AppColors.primaryColor,
@@ -173,7 +179,9 @@ class _LoginViewState extends State<LoginView> {
       case LoginSuccess():
         AppMessages.showSuccess(
           context,
-          message: state.response.message ?? AppStrings.loginSuccessfully,
+          message:
+              state.response.message ??
+              AppLocalizations.of(context)!.loginSuccessfully,
         );
         context.go(AppRouterPaths.kAppSections);
       case LoginInitial():
@@ -184,9 +192,11 @@ class _LoginViewState extends State<LoginView> {
 
   void _submitLogin(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      context.read<LoginCubit>().login(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
+      context.read<LoginCubit>().doIntent(
+        SubmitLoginIntent(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        ),
       );
     }
   }
@@ -209,11 +219,13 @@ class _PasswordField extends StatelessWidget {
           textInputAction: TextInputAction.done,
           onFieldSubmitted: (_) => onSubmitted(),
           decoration: InputDecoration(
-            hintText: AppStrings.password,
-            labelText: AppStrings.password,
+            hintText: AppLocalizations.of(context)!.password,
+            labelText: AppLocalizations.of(context)!.password,
             suffixIcon: IconButton(
               onPressed: () {
-                context.read<LoginCubit>().togglePasswordVisibility();
+                context.read<LoginCubit>().doIntent(
+                  TogglePasswordVisibilityIntent(),
+                );
               },
               icon: Icon(
                 state.obscurePassword

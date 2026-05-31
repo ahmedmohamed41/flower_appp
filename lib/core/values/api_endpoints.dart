@@ -3,7 +3,7 @@ abstract class ApiEndpoints {
   static const String baseUrl = 'https://flower.elevateegy.com/api/v1';
 
   //auth
-  static const String login = '/auth/signin';
+  static const String login = '$baseUrl/auth/signin';
   static const String signUp = '$baseUrl/auth/signup';
   static const String changePassword = '$baseUrl/auth/change-password';
   static const String uploadProfilePhoto = '$baseUrl/auth/upload-photo';
@@ -26,7 +26,7 @@ abstract class ApiEndpoints {
   static const String coupons = '$baseUrl/coupons';
   static const String applyCoupon = '$baseUrl/coupons/apply';
   static const String validateCoupon = '$baseUrl/coupons/validate';
-
+  static const String uploads = 'https://flower.elevateegy.com/uploads';
   //orders
   static const String orders = '$baseUrl/orders';
   static const String addresses = '$baseUrl/addresses';

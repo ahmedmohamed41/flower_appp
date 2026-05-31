@@ -30,7 +30,7 @@ class _LoginApiClient implements LoginApiClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/auth/signin',
+            'https://flower.elevateegy.com/api/v1/auth/signin',
             queryParameters: queryParameters,
             data: _data,
           )

@@ -1,0 +1,74 @@
+import 'package:flower_appp/features/app_sections/home/presentation/widgets/categories_list_view_item.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../../../../../core/shared_features/shared_view_model/cubit/home_shared_cubit.dart';
+import '../../../../../core/shared_features/shared_view_model/states/home_shared_states.dart';
+
+class CategoriesListView extends StatelessWidget {
+  final VoidCallback onCategorySelected;
+
+  const CategoriesListView({super.key, required this.onCategorySelected});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeSharedCubit, HomeSharedStates>(
+      buildWhen: (previous, current) =>
+          previous.categoriesState != current.categoriesState,
+      builder: (context, state) {
+        final categoriesState = state.categoriesState;
+
+        if (categoriesState.isLoading) {
+          return SizedBox(
+            height: 120,
+            child: Center(
+              child: SpinKitFadingCircle(
+                color: Theme.of(context).colorScheme.primary,
+                size: 50,
+              ),
+            ),
+          );
+        }
+
+        if (categoriesState.errorMessage != null) {
+          return SizedBox(
+            height: 120,
+            child: Center(
+              child: Text(
+                categoriesState.errorMessage!,
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
+          );
+        }
+
+        final categoriesList = categoriesState.data?.categories ?? [];
+
+        if (categoriesList.isEmpty) {
+          return const SizedBox(
+            height: 120,
+            child: Center(child: Text("No Categories Found")),
+          );
+        }
+
+        return SizedBox(
+          height: 120,
+          child: ListView.separated(
+            itemCount: categoriesList.length,
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            separatorBuilder: (context, index) => const SizedBox(width: 10),
+            itemBuilder: (context, index) {
+              final category = categoriesList[index];
+              return CategoriesListViewItem(
+                category: category,
+                index: index,
+                onTap: onCategorySelected,
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}

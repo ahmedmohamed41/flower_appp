@@ -1,7 +1,20 @@
-import 'package:flower_appp/features/app_sections/profile/presentation/view_model/profile_cubit.dart';
-import 'package:flower_appp/features/app_sections/profile/presentation/view_model/profile_states.dart';
+import 'package:flower_appp/core/router/router_paths.dart';
+import 'package:flower_appp/core/theme/app_colors.dart';
+import 'package:flower_appp/core/theme/app_text_styles.dart';
+import 'package:flower_appp/core/values/assets.gen.dart';
+import 'package:flower_appp/features/app_sections/profile/presentation/view_model/cubit/profile_cubit.dart';
+import 'package:flower_appp/features/app_sections/profile/presentation/view_model/state/profile_states.dart';
+import 'package:flower_appp/features/app_sections/widgets/custom_profile_header.dart';
+import 'package:flower_appp/features/app_sections/widgets/custom_profile_info.dart';
+import 'package:flower_appp/features/app_sections/widgets/custom_profile_menu_tile.dart';
+import 'package:flower_appp/features/app_sections/widgets/profile_language_bottom_sheet.dart';
+import 'package:flower_appp/features/app_sections/widgets/profile_logout_dialog.dart';
+import 'package:flower_appp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -11,56 +24,103 @@ class ProfileView extends StatelessWidget {
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: (context, state) {
         if (state is LogoutSuccess) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/login',
-            (route) => false,
-          );
+          context.go(AppRouterPaths.kLoginView);
         }
       },
       builder: (context, state) {
-        if (state is ProfileLoaded) {
+        if (state is ProfileSuccess) {
           return Scaffold(
-            body: SafeArea(
+            backgroundColor: AppColors.whiteColor,
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 20),
-
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: state.photoUrl.isNotEmpty
-                        ? NetworkImage(state.photoUrl)
-                        : const AssetImage('assets/images/default_profile.png')
-                              as ImageProvider,
+                  const SizedBox(height: 15),
+                  const CustomProfileHeader(),
+                  const SizedBox(height: 15),
+                  CustomProfileInfo(state: state),
+                  const SizedBox(height: 15),
+                  CustomProfileMenuTile(
+                    icon: SvgPicture.asset(Assets.icons.transactionOrder),
+                    title: AppLocalizations.of(context)!.myOrders,
+                    onTap: () {},
                   ),
-                  const SizedBox(height: 10),
-
-                  Text(
-                    state.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  CustomProfileMenuTile(
+                    icon: SvgPicture.asset(Assets.icons.locationIcon),
+                    title: AppLocalizations.of(context)!.savedAddress,
+                    onTap: () {},
+                  ),
+                  Divider(color: AppColors.placeHolderColor),
+                  CustomProfileMenuTile(
+                    icon: Switch(
+                      value: true,
+                      activeThumbColor: AppColors.whiteColor,
+                      activeTrackColor: AppColors.primaryColor,
+                      inactiveThumbColor: AppColors.whiteColor,
+                      inactiveTrackColor: AppColors.placeHolderColor,
+                      onChanged: (_) {},
+                    ),
+                    title: AppLocalizations.of(context)!.notification,
+                    onTap: () {},
+                  ),
+                  Divider(color: AppColors.placeHolderColor),
+                  CustomProfileMenuTile(
+                    icon: SvgPicture.asset(Assets.icons.translateIcon),
+                    title: AppLocalizations.of(context)!.language,
+                    trailing: Text(
+                      languageName(context, state.languageCode),
+                      style: AppTextStyles.textStyleRegular12.copyWith(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    onTap: () => showLanguageBottomSheet(
+                      context,
+                      selectedLanguageCode: state.languageCode,
                     ),
                   ),
-
-                  Text(state.email, style: const TextStyle(color: Colors.grey)),
-
-                  const SizedBox(height: 30),
-
-                  // ListTile(
-                  //   leading: const Icon(Icons.logout, color: Colors.red),
-                  //   title: const Text('Logout'),
-                  //   onTap: () {
-                  //     // بنظهر الـ Custom Dialog اللي في الديزاين عندك
-                  //     showLogoutDialog(context);
-                  //   },
-                  // ),
+                  CustomProfileMenuTile(
+                    title: AppLocalizations.of(context)!.aboutUs,
+                    onTap: () {},
+                  ),
+                  CustomProfileMenuTile(
+                    title: AppLocalizations.of(context)!.termsAndConditions,
+                    onTap: () {},
+                  ),
+                  Divider(color: AppColors.placeHolderColor),
+                  CustomProfileMenuTile(
+                    icon: SvgPicture.asset(Assets.icons.logoutIcon),
+                    title: AppLocalizations.of(context)!.logout,
+                    trailing: SvgPicture.asset(Assets.icons.logoutIcon),
+                    onTap: () => showLogoutDialog(context),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'v 6.3.0 - (446)',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.textStyleRegular12.copyWith(
+                      color: AppColors.greyColor,
+                    ),
+                  ),
                 ],
               ),
             ),
           );
         }
-        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+
+        if (state is ProfileError) {
+          return Scaffold(body: Center(child: Text(state.message)));
+        }
+
+        return Scaffold(
+          body: Center(
+            child: SpinKitFadingCircle(
+              color: Theme.of(context).colorScheme.primary,
+              size: 50,
+            ),
+          ),
+        );
       },
     );
   }

@@ -1,80 +1,34 @@
-import 'package:flower_appp/features/best_seller/domain/models/best_seller_model.dart';
+import 'package:flower_appp/core/shared_features/products/data/models/product_dto.dart';
+import 'package:flower_appp/core/shared_features/products/domain/entities/products_response_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'dart:convert';
+
 part 'best_seller_dto.g.dart';
+
+BestSellerDto bestSellerDtoFromJson(String str) =>
+    BestSellerDto.fromJson(json.decode(str));
+
+String bestSellerDtoToJson(BestSellerDto data) => json.encode(data.toJson());
 
 @JsonSerializable()
 class BestSellerDto {
-  @JsonKey(name: "_id")
-  String? id;
-  @JsonKey(name: "title")
-  String? title;
-  @JsonKey(name: "slug")
-  String? slug;
-  @JsonKey(name: "description")
-  String? description;
-  @JsonKey(name: "imgCover")
-  String? imgCover;
-  @JsonKey(name: "images")
-  List<String>? images;
-  @JsonKey(name: "price")
-  int? price;
-  @JsonKey(name: "priceAfterDiscount")
-  int? priceAfterDiscount;
-  @JsonKey(name: "discount")
-  int? discount;
-  @JsonKey(name: "rateAvg")
-  int? rateAvg;
-  @JsonKey(name: "rateCount")
-  int? rateCount;
-  @JsonKey(name: "sold")
-  int? sold;
-  @JsonKey(name: "quantity")
-  int? quantity;
-  @JsonKey(name: "category")
-  String? category;
-  @JsonKey(name: "occasion")
-  String? occasion;
-  @JsonKey(name: "isSuperAdmin")
-  bool? isSuperAdmin;
-  @JsonKey(name: "createdAt")
-  DateTime? createdAt;
-  @JsonKey(name: "updatedAt")
-  DateTime? updatedAt;
-  @JsonKey(name: "__v")
-  int? v;
-  @JsonKey(name: "id")
-  String? bestSellerId;
+  @JsonKey(name: "message")
+  final String? message;
+  @JsonKey(name: "bestSeller")
+  final List<ProductDTO>? bestSeller;
 
-  BestSellerDto({
-    this.id,
-    this.title,
-    this.slug,
-    this.description,
-    this.imgCover,
-    this.images,
-    this.price,
-    this.priceAfterDiscount,
-    this.discount,
-    this.rateAvg,
-    this.rateCount,
-    this.sold,
-    this.quantity,
-    this.category,
-    this.occasion,
-    this.isSuperAdmin,
-    this.createdAt,
-    this.updatedAt,
-    this.v,
-    this.bestSellerId,
-  });
-  BestSellerModel toDomain() => BestSellerModel(
-    id: id ?? '',
-    discount: discount ?? 0,
-    imgCover: imgCover ?? '',
-    price: price ?? 0,
-    priceAfterDiscount: priceAfterDiscount ?? 0,
-    title: title ?? '',
-  );
+  BestSellerDto({this.message, this.bestSeller});
+  ProductsResponseEntity toDomain() {
+    return ProductsResponseEntity(
+      message: message,
+      products:
+          bestSeller?.map((element) {
+            return element.toDomain();
+          }).toList() ??
+          [],
+    );
+  }
+
   factory BestSellerDto.fromJson(Map<String, dynamic> json) =>
       _$BestSellerDtoFromJson(json);
 

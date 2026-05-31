@@ -1,33 +1,60 @@
 import 'package:flower_appp/config/di/di.dart';
 import 'package:flower_appp/core/router/router_paths.dart';
-import 'package:flower_appp/core/shared_features/cubit/home_shared_cubit.dart';
-import 'package:flower_appp/features/app_sections/app_sections.dart';
-import 'package:flower_appp/features/auth/forget_password/presentation/view/forget_password_screen.dart';
+import 'package:flower_appp/core/shared_features/products/domain/entities/product_entity.dart';
+import 'package:flower_appp/core/shared_features/shared_view_model/cubit/home_shared_cubit.dart';
+import 'package:flower_appp/core/shared_features/shared_view_model/Intent/home_shared_intent.dart';
+import 'package:flower_appp/features/app_sections/categories/presentation/views/categories_view.dart';
 import 'package:flower_appp/features/auth/forget_password/presentation/view_model/cubit/forget_password_cubit.dart';
-import 'package:flower_appp/features/auth/login/presentation/view_model/login_cubit.dart';
+import 'package:flower_appp/features/auth/forget_password/presentation/view/forget_password_screen.dart';
+import 'package:flower_appp/features/app_sections/app_sections.dart';
+import 'package:flower_appp/features/auth/login/presentation/view_model/cubit/login_cubit.dart';
 import 'package:flower_appp/features/auth/login/presentation/views/login_view.dart';
 import 'package:flower_appp/features/auth/signup/presentation/screens/register_screen.dart';
 import 'package:flower_appp/features/best_seller/presentation/view/best_seller_view.dart';
+import 'package:flower_appp/features/change_password/presentation/view/change_password_view.dart';
+import 'package:flower_appp/features/change_password/presentation/view_model/cubit/change_password_cubit.dart';
+import 'package:flower_appp/features/occasion/presentation/view_model/intent/occasion_intent.dart';
+import 'package:flower_appp/features/occasion/presentation/view/occasion_view.dart';
+import 'package:flower_appp/features/product_details/presentation/view/product_details_view.dart';
+import 'package:flower_appp/features/search/presentation/views/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../values/app_strings.dart';
+import 'package:flower_appp/features/occasion/presentation/view_model/cubit/occasion_cubit.dart';
+import 'package:flower_appp/features/edite_profile/presentation/view_model/cubit/edite_profile_cubit.dart';
+import 'package:flower_appp/features/edite_profile/presentation/view/edite_profile_view.dart';
+import '../../l10n/app_localizations.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 abstract class AppRouter {
   static GoRouter getRouter({
     String initialLocation = AppRouterPaths.kLoginView,
   }) => GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: initialLocation,
     errorBuilder: (context, state) => Scaffold(
       body: Center(
         child: Text(
-          AppStrings.errorMessage,
+          textAlign: TextAlign.center,
+          AppLocalizations.of(context)!.errorMessage,
           style: const TextStyle(fontSize: 18),
         ),
       ),
     ),
     routes: [
+      GoRoute(
+        path: AppRouterPaths.kSearchView,
+        builder: (context, state) => BlocProvider.value(
+          value: getIt<HomeSharedCubit>(),
+          child: SearchView(),
+        ),
+      ),
+      GoRoute(
+        path: AppRouterPaths.kCategoriesView,
+        builder: (context, state) => const CategoriesView(),
+      ),
       GoRoute(
         path: AppRouterPaths.kLoginView,
         builder: (context, state) => BlocProvider(
@@ -37,12 +64,13 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: AppRouterPaths.kAppSections,
-        builder: (context, state) => const AppSections(),
+        builder: (context, state) => BlocProvider(
+          create: (context) =>
+              getIt<HomeSharedCubit>()
+                ..handleHomeSharedIntent(GetAllHomeDataIntent()),
+          child: const AppSections(),
+        ),
       ),
-      // GoRoute(
-      //   path: AppRouterPaths.kSignUpView,
-      //   builder: (context, state) => const SignUpView(),
-      // ),
       GoRoute(
         path: AppRouterPaths.kForgetPasswordView,
         builder: (context, state) => BlocProvider(
@@ -50,25 +78,58 @@ abstract class AppRouter {
           child: ForgetPasswordScreen(),
         ),
       ),
-      // GoRoute(
-      //   path: AppRouterPaths.kLoginView,
-      //   builder: (context, state) => const LoginView(),
-      // ),
+      GoRoute(
+        path: AppRouterPaths.kChangePasswordView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<ChangePasswordCubit>(),
+          child: ChangePasswordView(),
+        ),
+      ),
+
       GoRoute(
         path: AppRouterPaths.kSignUpView,
         builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
+        path: AppRouterPaths.kProductDetailsView,
+        builder: (context, state) =>
+            ProductDetailsView(product: state.extra as ProductEntity),
+      ),
+      GoRoute(
         path: AppRouterPaths.kBestSellerView,
         builder: (context, state) => BlocProvider.value(
-          value: getIt<HomeSharedCubit>()..getBestSellers(),
+          value: getIt<HomeSharedCubit>()
+            ..handleHomeSharedIntent(GetBestSellersIntent()),
           child: const BestSellerView(),
         ),
       ),
-      // GoRoute(
-      //   path: AppRouterPaths.kForgetPasswordView,
-      //   builder: (context, state) => const ForgetPasswordView(),
-      // ),
+      GoRoute(
+        path: AppRouterPaths.kOccasionView,
+        builder: (context, state) {
+          final extraParam = state.extra;
+          final initialIndex = extraParam is int ? extraParam : 0;
+
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<OccasionCubit>()
+                  ..handleIntent(
+                    LoadOccasionsIntent(initialIndex: initialIndex),
+                  ),
+              ),
+              BlocProvider.value(value: getIt<HomeSharedCubit>()),
+            ],
+            child: const OccasionView(),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRouterPaths.kEditProfileView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<EditeProfileCubit>(),
+          child: const EditeProfileView(),
+        ),
+      ),
     ],
   );
 }
