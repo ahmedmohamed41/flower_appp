@@ -15,6 +15,9 @@ import 'package:flower_appp/features/change_password/presentation/view/change_pa
 import 'package:flower_appp/features/change_password/presentation/view_model/cubit/change_password_cubit.dart';
 import 'package:flower_appp/features/occasion/presentation/view_model/intent/occasion_intent.dart';
 import 'package:flower_appp/features/occasion/presentation/view/occasion_view.dart';
+import 'package:flower_appp/features/orders/presentation/view_model/cubit/orders_cubit.dart';
+import 'package:flower_appp/features/orders/presentation/view_model/intent/orders_intent.dart';
+import 'package:flower_appp/features/orders/presentation/views/orders_view.dart';
 import 'package:flower_appp/features/product_details/presentation/view/product_details_view.dart';
 import 'package:flower_appp/features/search/presentation/views/search_view.dart';
 import 'package:flutter/material.dart';
@@ -101,6 +104,13 @@ abstract class AppRouter {
           value: getIt<HomeSharedCubit>()
             ..handleHomeSharedIntent(GetBestSellersIntent()),
           child: const BestSellerView(),
+        ),
+      ),
+      GoRoute(
+        path: AppRouterPaths.kOrdersView,
+        builder: (context, state) => BlocProvider.value(
+          value: getIt<OrdersCubit>()..handleIntent(FetchOrdersIntent()),
+          child: const OrdersView(),
         ),
       ),
       GoRoute(
