@@ -3,6 +3,7 @@ import 'package:flower_appp/core/shared_features/products/domain/entities/produc
 import 'package:flower_appp/core/theme/app_colors.dart';
 import 'package:flower_appp/core/theme/app_text_styles.dart';
 import 'package:flower_appp/core/widgets/app_messages.dart';
+import 'package:flower_appp/core/widgets/check_guest_and_show_dialog.dart';
 import 'package:flower_appp/features/app_sections/cart/data/models/request/add_to_cart_request.dart';
 import 'package:flower_appp/features/app_sections/cart/presentation/view_model/cubit/cart_cubit.dart';
 import 'package:flower_appp/features/app_sections/cart/presentation/view_model/intent/cart_intent.dart';
@@ -203,7 +204,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     width: double.infinity,
                     height: 54,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        final isGuest = await checkGuestAndShowDialog(context);
+                        if (isGuest) return;
                         int quantity = 0;
                         context.read<CartCubit>().cartIntentHandler(
                           AddItemToCartIntent(

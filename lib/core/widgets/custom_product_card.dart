@@ -1,4 +1,5 @@
 import 'package:flower_appp/core/widgets/app_messages.dart';
+import 'package:flower_appp/core/widgets/check_guest_and_show_dialog.dart';
 import 'package:flower_appp/features/app_sections/cart/data/models/request/add_to_cart_request.dart';
 import 'package:flower_appp/features/app_sections/cart/presentation/view_model/cubit/cart_cubit.dart';
 import 'package:flower_appp/features/app_sections/cart/presentation/view_model/intent/cart_intent.dart';
@@ -161,7 +162,9 @@ class _CustomProductCardState extends State<CustomProductCard> {
                   height: 30,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {
+                    onPressed: () async {
+                      final isGuest = await checkGuestAndShowDialog(context);
+                      if (isGuest) return;
                       setState(() {
                         _isWaitingToStart = true;
                         _isThisItemLoading = false;
