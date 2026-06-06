@@ -21,14 +21,14 @@ class OrdersView extends StatelessWidget {
         appBar: CustomAppBar(title: AppLocalizations.of(context)!.myOrders),
         body: Column(
           children: [
-            const TabBar(
+            TabBar(
               indicatorColor: AppColors.primaryColor,
               labelColor: AppColors.primaryColor,
               unselectedLabelColor: AppColors.placeHolderColor,
               indicatorSize: TabBarIndicatorSize.tab,
               tabs: [
-                Tab(text: 'Active'),
-                Tab(text: 'Completed'),
+                Tab(text: AppLocalizations.of(context)!.active),
+                Tab(text: AppLocalizations.of(context)!.completed),
               ],
             ),
             Expanded(
@@ -45,7 +45,10 @@ class OrdersView extends StatelessWidget {
 
                   if (state.status == OrdersStatus.error) {
                     return Center(
-                      child: Text(state.errorMessage ?? 'Something went wrong'),
+                      child: Text(
+                        state.errorMessage ??
+                            AppLocalizations.of(context)!.errorMessage,
+                      ),
                     );
                   }
 
@@ -54,12 +57,16 @@ class OrdersView extends StatelessWidget {
                       _OrdersList(
                         orders: state.activeOrders,
                         isActive: true,
-                        emptyMessage: 'No active orders found',
+                        emptyMessage: AppLocalizations.of(
+                          context,
+                        )!.noactiveordersfound,
                       ),
                       _OrdersList(
                         orders: state.completedOrders,
                         isActive: false,
-                        emptyMessage: 'No completed orders found',
+                        emptyMessage: AppLocalizations.of(
+                          context,
+                        )!.nocompletedordersfound,
                       ),
                     ],
                   );

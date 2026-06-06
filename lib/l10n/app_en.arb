@@ -151,5 +151,14 @@
   "continueasguest": "Continue as guest",
   "pleaseSignInToAddItemstoyourcartandenjoyfullshoppingfeatures": "Please sign in to add items to your cart and enjoy full shopping features",
   "signInRequired": "Sign in required",
-  "signIn": "sign in"
+  "signIn": "sign in",
+  "filter": "Filter",
+  "lowesPrice": "Lowes Price",
+  "highestPrice": "Highest Price",
+  "newProduct": "New",
+  "old": "Old",
+  "discount": "Discount",
+  "noactiveordersfound": "No active orders found",
+  "nocompletedordersfound": "No completed orders found",
+  "reOrder": "Reorder"
 }

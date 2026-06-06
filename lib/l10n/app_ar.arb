@@ -152,5 +152,14 @@
   "continueasguest": "تابع كضيف",
   "pleaseSignInToAddItemstoyourcartandenjoyfullshoppingfeatures": "يرجى تسجيل الدخول لإضافة المنتجات إلى سلة التسوق والاستمتاع بكافة مزايا التسوق",
   "signInRequired": "تسجيل الدخول مطلوب.",
-  "signIn": "تسجيل الدخول"
+  "signIn": "تسجيل الدخول",
+  "filter": "تصفية",
+  "lowesPrice": "أقل سعر",
+  "highestPrice": "أعلى سعر",
+  "newProduct": "جديد",
+  "old": "قديم",
+  "discount": "خصم",
+  "noactiveordersfound": "لم يتم العثور على أي طلبات نشطة",
+  "nocompletedordersfound": "لم يتم العثور على أي طلبات مكتملة",
+  "reOrder": "إعادة الطلب"
 }

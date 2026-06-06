@@ -444,4 +444,61 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get phoneInvalid => 'رقم هاتف مصري غير صالح';
+
+  @override
+  String get loginNow => 'سجّل الدخول الآن';
+
+  @override
+  String get toManageyoursavedaddressespleaselogin =>
+      'لإدارة عناوينك المحفوظة، يُرجى تسجيل الدخول';
+
+  @override
+  String get toManageyourorderspleaselogin =>
+      'لإدارة طلباتك، يُرجى تسجيل الدخول';
+
+  @override
+  String get guestUser => 'زائر';
+
+  @override
+  String get signIntoexploremore => 'سجّل الدخول للاطلاع على المزيد';
+
+  @override
+  String get continueasguest => 'تابع كضيف';
+
+  @override
+  String get pleaseSignInToAddItemstoyourcartandenjoyfullshoppingfeatures =>
+      'يرجى تسجيل الدخول لإضافة المنتجات إلى سلة التسوق والاستمتاع بكافة مزايا التسوق';
+
+  @override
+  String get signInRequired => 'تسجيل الدخول مطلوب.';
+
+  @override
+  String get signIn => 'تسجيل الدخول';
+
+  @override
+  String get filter => 'تصفية';
+
+  @override
+  String get lowesPrice => 'أقل سعر';
+
+  @override
+  String get highestPrice => 'أعلى سعر';
+
+  @override
+  String get newProduct => 'جديد';
+
+  @override
+  String get old => 'قديم';
+
+  @override
+  String get discount => 'خصم';
+
+  @override
+  String get noactiveordersfound => 'لم يتم العثور على أي طلبات نشطة';
+
+  @override
+  String get nocompletedordersfound => 'لم يتم العثور على أي طلبات مكتملة';
+
+  @override
+  String get reOrder => 'إعادة الطلب';
 }

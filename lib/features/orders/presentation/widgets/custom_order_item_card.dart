@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flower_appp/core/theme/app_colors.dart';
 import 'package:flower_appp/core/theme/app_text_styles.dart';
 import 'package:flower_appp/features/orders/domain/models/orders_model.dart';
+import 'package:flower_appp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -87,7 +88,9 @@ class OrderItemCard extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {},
                       child: Text(
-                        isActive ? 'Track order' : 'Reorder',
+                        isActive
+                            ? AppLocalizations.of(context)!.trackOrder
+                            : AppLocalizations.of(context)!.reOrder,
                         style: AppTextStyles.textStyleMedium12.copyWith(
                           color: AppColors.whiteColor,
                         ),
