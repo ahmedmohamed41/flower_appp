@@ -1,5 +1,9 @@
-abstract class ProfileState {
+import 'package:equatable/equatable.dart';
+
+abstract class ProfileState extends Equatable {
   const ProfileState();
+  @override
+  List<Object?> get props => [];
 }
 
 class ProfileInitial extends ProfileState {
@@ -22,6 +26,8 @@ class ProfileSuccess extends ProfileState {
     required this.photoUrl,
     required this.languageCode,
   });
+  @override
+  List<Object?> get props => [name, email, photoUrl, languageCode];
 }
 
 class ProfileError extends ProfileState {
