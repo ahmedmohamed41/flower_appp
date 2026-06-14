@@ -16,6 +16,19 @@
 </p>
 
 A Flutter e-commerce application for browsing and ordering flowers. The app is built with a feature-first Clean Architecture style and includes authentication, product discovery, cart management, orders, profile management, localization, and API integration with the Elevate Flower backend.
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/Screenshot_20260426_212422.png" width="30%" />
+  <img src="screenshots/Screenshot_20260426_212456.png" width="30%" />
+  <img src="screenshots/Screenshot_20260426_212614.png" width="30%" />
+</p>
+
+<p align="center">
+  <img src="screenshots/Screenshot_20260426_212637.png" width="30%" />
+  <img src="screenshots/Screenshot_20260426_212645.png" width="30%" />
+  <img src="screenshots/WhatsApp Image 2026-04-28 at 5.17.33 PM.jpeg" width="30%" />
+</p>
 
 ## Table of Contents
 
