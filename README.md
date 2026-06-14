@@ -15,98 +15,219 @@
   <img src="https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI/CD" />
 </p>
 
----
+A Flutter e-commerce application for browsing and ordering flowers. The app is built with a feature-first Clean Architecture style and includes authentication, product discovery, cart management, orders, profile management, localization, and API integration with the Elevate Flower backend.
 
-## 📌 Overview
+## Table of Contents
 
-**Flowery App** is a robust mobile e-commerce platform tailored for premium floral arrangements, dynamic gifting, and custom occasions browsing. Built following strict **Clean Architecture principles** and a **Modular Feature-First structure**, the application guarantees maximum separation of concerns, high testability, and an agile development workflow.
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Code Generation](#code-generation)
+- [Localization](#localization)
+- [Testing](#testing)
+- [API](#api)
 
-The application natively handles complex user states, providing a fully integrated **Guest Mode interceptor ecosystem** that gracefully regulates functional restrictions across critical views like the Cart and Home modules.
+## Overview
 
----
+Flower App is a cross-platform Flutter project that delivers a complete shopping flow for flowers and gifts. It supports guest/authenticated entry, secure token storage, localized English and Arabic UI, product browsing by category and occasion, best sellers, cart actions, orders, and user profile operations.
 
-## 🛠️ Architecture & Tech Stack
+## Features
 
-The architecture separates core enterprise business logic from framework-specific operations, UI changes, or network clients.
+- Authentication: login, sign up, logout, change password, and forgot password flow.
+- Home sections: categories, occasions, best sellers, and shared product data.
+- Product browsing: product cards, product details, category listing, sorting, and search.
+- Cart: add items, remove items, update quantity, and view checkout totals.
+- Orders: fetch and display user orders.
+- Profile: profile data, edit profile, upload profile photo, language selection, and guest handling.
+- Localization: English and Arabic support using Flutter generated localizations.
+- Secure persistence: token and app preferences stored with `flutter_secure_storage`.
+- Network layer: `dio` with Retrofit API clients and JSON serialization.
+- State management: `flutter_bloc` Cubits with intent/state separation.
+- Dependency injection: `get_it` and `injectable`.
+- Tests: unit tests for API data sources, repositories, use cases, and Cubits.
 
-### 📐 Layer Subdivision (Per Feature)
+## Tech Stack
 
-Every module inside the directory is split horizontally to ensure clean boundaries:
-* 🌐 **API / Data Sources:** Houses target network clients (`retrofit`) and remote endpoints integration.
-* 📦 **Data Layer:** Manages domain-mapped models, exceptions mapping, and entity caching.
-* 🧠 **Domain Layer:** Uncompromisingly pure Dart layer implementing system business rules and abstract repository contracts.
-* 🎨 **Presentation Layer:** State consumption powered by `Cubit` controllers and lightweight atomic UI widgets.
+- Flutter / Dart
+- `flutter_bloc` for state management
+- `go_router` for navigation
+- `dio` and `retrofit` for networking
+- `json_serializable` for model serialization
+- `get_it` and `injectable` for dependency injection
+- `flutter_secure_storage` for secure local storage
+- `flutter_localizations` and ARB files for localization
+- `mocktail`, `mockito`, and `bloc_test` for testing
 
-### 📦 Key Infrastructure Dependencies
+## Architecture
 
-* **State Architecture:** `flutter_bloc` managing reactive states via discrete custom intents.
-* **Service Location (DI):** Runtime dependencies wiring managed by `get_it` and compile-time mappings via `injectable`.
-* **Dynamic Routing:** Context-aware declarative router structure managed via `go_router`.
-* **Type-Safe Networking:** Asynchronous API data harvesting handled by `dio` clients paired with `retrofit` factories.
-* **Data Security:** Encrypted local cache tracking user authorization keys via `flutter_secure_storage`.
+The project follows a feature-first Clean Architecture approach. Most features are split into:
 
----
+- `presentation`: views, widgets, Cubits, intents, and states.
+- `domain`: entities, repository contracts, and use cases.
+- `data`: DTOs, repository implementations, and data source contracts.
+- `api`: Retrofit API clients and remote data source implementations.
 
-## 🧪 DevOps & Quality Assurance (QA)
+This keeps UI, business rules, data mapping, and network integration separated and easier to test.
 
-To sustain a highly resilient production environment, the repository forces continuous quality gates:
-
-* **Automated Unit Testing:** Custom feature domain logics and model data mapping behaviors are covered using rigorous unit tests located within the `test/` root module to completely prevent breaking changes.
-* **Component Verification:** Structural `testWidgets` validation routines are pre-configured to systematically mock dynamic ViewModel (Cubit) response cycles.
-* **Continuous Integration (CI):** Integrated seamlessly with **GitHub Actions workflows**. Every incoming Pull Request or merge activity automatically triggers isolated runner environments to execute static code analysis (linting), project compilation verification, and complete unit testing blocks before code delivery.
-
----
-
-## ✨ Features Checklist
-
-### 🔑 Authentication & Session States
-- [x] Secured user onboarding workflows: Login, SignUp, and Reset Forget Password layouts.
-- [x] **Smart Guest Mode Guarding:** Local secure storage interceptors tracking access levels seamlessly.
-- [x] **Overlay Pop-up Controls:** Contextual touch interceptors blocking actions for guest users (e.g., preventing address registration) and presenting a tailored modal prompting them to register.
-
-### 🌸 Catalog, Search & Gifting
-- [x] Real-time query search storefront mapping dynamic text input parameters.
-- [x] Granular filtering via custom categories (Flowers, Gifts, Cards, Jewellery).
-- [x] Curated Occasions layout and Best Seller carousels tracking user interaction.
-
-### 🛒 Cart & Checkout Management
-- [x] Live state-driven Cart updating item addition, unit counts, and single-tap removals.
-- [x] Automatic real-time financial tracking mapping Sub-Total tiers, Delivery fees, and absolute Totals.
-- [x] Clean, scalable transactional checkout flow ready for payment gateways.
-
----
-
-## 📱 Screenshots Gallery
-
-<p align="center">
-  <img src="screenshots/home_screen.jpg" width="30%" alt="Home View Storefront" />
-  <img src="screenshots/cart_screen.png" width="30%" alt="Cart State & Invoice" />
-  <img src="screenshots/guest_dialog.jpg" width="30%" alt="Custom Guest Dialog Prompt" />
-</p>
-
----
-
-## 📂 Structural Framework Directory
+## Project Structure
 
 ```text
 lib/
-├── config/                  # Global injection frameworks and application profiles
-│   └── di/                  # Compile-safe automated dependency service location setup
-├── core/                    # Globally shared UI primitives, color tokens, and layout schemas
-│   ├── router/              # Declarative GoRouter routing schemas (router_paths.dart)
-│   ├── theme/               # Centralized branding parameters (app_colors.dart, app_text_styles.dart)
-│   ├── values/              # Codegen asset and image maps indexing (assets.gen.dart)
-│   └── widgets/             # Reusable shared global widgets (address_widget.dart)
-├── features/                # Pure vertical decoupled business units (Feature-First)
-│   ├── app_sections/        # Central navigational root tabs mapping
-│   ├── auth/                # Security controls (login, signup, forget_password)
-│   ├── best_seller/         # Premium trending floristry modules
-│   ├── change_password/     # Profile security credential modifications
-│   ├── checkout/            # Operational invoice validation and order placement
-│   ├── edit_profile/        # User detail modifications and account forms
-│   ├── occasion/            # Specialized thematic event filters
-│   ├── orders/              # Historial user purchase list tracking
-│   ├── product_details/     # Immersive single product preview screens
-│   ├── search/              # Real-time search matching data filters
-│   └── user_addresses/      # Multi-tier address lookup and management logic
-└── l10n/                    # System multi-language localization dictionaries
+  config/
+    di/                  Dependency injection setup
+    dio/                 Dio configuration
+    security_storage/    Secure storage abstraction
+  core/
+    errors/              Exceptions and failures
+    localization/        App locale controller
+    network/             API interceptor
+    router/              GoRouter setup and route paths
+    shared_features/     Shared products and home data
+    theme/               Colors, text styles, and app theme
+    values/              Generated assets, fonts, API constants
+    widgets/             Shared UI widgets
+  features/
+    app_sections/        Main app shell, home, cart, categories, profile
+    auth/                Login, sign up, and forgot password
+    best_seller/         Best seller listing
+    change_password/     Change password flow
+    edite_profile/       Edit profile flow
+    occasion/            Occasion listing
+    orders/              Orders listing
+    product_details/     Product details screen
+    search/              Product search
+  l10n/                  Localization ARB files and generated classes
+test/                    Unit and Cubit tests
+assets/
+  icons/                 SVG assets
+  fonts/                 Inter font family
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Flutter SDK compatible with Dart `^3.11.0`
+- Android Studio or Xcode for mobile builds
+- A configured emulator, simulator, or physical device
+
+Check your Flutter setup:
+
+```bash
+flutter doctor
+```
+
+### Installation
+
+Clone the repository and install dependencies:
+
+```bash
+flutter pub get
+```
+
+Generate required files:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+Run the app:
+
+```bash
+flutter run
+```
+
+Run on a specific platform:
+
+```bash
+flutter run -d chrome
+flutter run -d android
+flutter run -d ios
+flutter run -d windows
+```
+
+## Code Generation
+
+This project uses generated code for Retrofit clients, JSON models, dependency injection, assets, fonts, and localization.
+
+Run code generation after changing API clients, DTOs, injectable classes, assets, or fonts:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+For continuous generation during development:
+
+```bash
+dart run build_runner watch --delete-conflicting-outputs
+```
+
+## Localization
+
+Localization is configured in `l10n.yaml`.
+
+- ARB source files: `lib/l10n/app_en.arb`, `lib/l10n/app_ar.arb`
+- Generated output: `lib/l10n/app_localizations.dart`
+- Supported locales: English and Arabic
+
+When localization files change, run:
+
+```bash
+flutter gen-l10n
+```
+
+## Testing
+
+Run all tests:
+
+```bash
+flutter test
+```
+
+Run static analysis:
+
+```bash
+flutter analyze
+```
+
+The test suite includes coverage for:
+
+- Remote data sources
+- Repository implementations
+- Use cases
+- Cubits and presentation state handling
+
+## API
+
+The app integrates with the Elevate Flower API:
+
+```text
+https://flower.elevateegy.com/api/v1
+```
+
+Main API areas include:
+
+- Authentication and profile
+- Products
+- Categories
+- Occasions
+- Cart
+- Orders
+- Best sellers
+
+The API constants are defined in:
+
+```text
+lib/core/values/api_endpoints.dart
+```
+
+## Development Notes
+
+- Keep generated files updated after modifying annotated models or API clients.
+- Prefer adding new features using the existing feature-first structure.
+- Keep business logic in use cases and Cubits, not directly inside widgets.
+- Add focused tests when changing repositories, use cases, or Cubit behavior.
+
