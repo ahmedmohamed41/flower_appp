@@ -19,10 +19,10 @@ A Flutter e-commerce application for browsing and ordering flowers. The app is b
 ## Screenshots
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/59067217-0647-4b15-ac76-fa5c2f6b9316" width="20%" height="200"/>
-  <img src="screenshots/Screenshot_20260426_212456.png" width="15%" />
-  <img src="screenshots/Screenshot_20260426_212614.png" width="15%" />
-  <img src="screenshots/Screenshot_20260426_212614.png" width="15%" />
+  <img src="https://github.com/user-attachments/assets/59067217-0647-4b15-ac76-fa5c2f6b9316" width="25%" height="300"/>
+  <img src="https://github.com/user-attachments/assets/59067217-0647-4b15-ac76-fa5c2f6b9316" width="25%" height="300"/>
+  <img src="https://github.com/user-attachments/assets/59067217-0647-4b15-ac76-fa5c2f6b9316" width="25%" height="300"/>
+  <img src="https://github.com/user-attachments/assets/59067217-0647-4b15-ac76-fa5c2f6b9316" width="25%" height="300"/>
 </p>
 
 <p align="center">
