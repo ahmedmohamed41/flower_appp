@@ -20,15 +20,21 @@ A Flutter e-commerce application for browsing and ordering flowers. The app is b
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/59067217-0647-4b15-ac76-fa5c2f6b9316" width="22%" height="300"/>
-  <img src="https://github.com/user-attachments/assets/59067217-0647-4b15-ac76-fa5c2f6b9316" width="22%" height="300"/>
-  <img src="https://github.com/user-attachments/assets/59067217-0647-4b15-ac76-fa5c2f6b9316" width="22%" height="300"/>
-  <img src="https://github.com/user-attachments/assets/59067217-0647-4b15-ac76-fa5c2f6b9316" width="22%" height="300"/>
+  <img src="https://github.com/user-attachments/assets/73af289f-4ea2-4d9d-b788-32a429cb08d3" width="22%" height="300"/>
+  <img src="https://github.com/user-attachments/assets/b46d0051-f756-49c2-b5d0-84fa02f359d6" width="22%" height="300"/>
+  <img src="https://github.com/user-attachments/assets/bf1e1672-5885-4c34-aab2-c6f81c5b6e5a" width="22%" height="300"/>
 </p>
 
 <p align="center">
-  <img src="screenshots/Screenshot_20260426_212637.png" width="30%" />
-  <img src="screenshots/Screenshot_20260426_212645.png" width="30%" />
-  <img src="screenshots/WhatsApp Image 2026-04-28 at 5.17.33 PM.jpeg" width="30%" />
+  <img src="https://github.com/user-attachments/assets/14cb2ab6-2349-4c58-baa5-c739d91f8094" width="22%" height="300"/>
+  <img src="https://github.com/user-attachments/assets/324ac971-8afe-41d9-92ca-42d4069d7b6b" width="22%" height="300"/>
+  <img src="https://github.com/user-attachments/assets/47eb7785-ac51-459e-bda3-e7b9528951c4" width="22%" height="300"/>
+  <img src="https://github.com/user-attachments/assets/30c5b4f5-c0e5-41e0-89ea-d092516a0eec" width="22%" height="300"/>
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c408b48f-a81b-4404-ae3b-d1d9c307167b" width="22%" height="300"/>
+  <img src="https://github.com/user-attachments/assets/70610b3f-e122-494a-9a23-adfd8e0a1c0b" width="22%" height="300"/>
 </p>
 
 ## Table of Contents
