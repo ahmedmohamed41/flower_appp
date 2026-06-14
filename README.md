@@ -1,7 +1,7 @@
 # 🌸 Flowery App
 
 <p align="center">
-  <img src="![Uploading Logo.png…]()" width="30%" />
+  <img <img width="89" height="25" alt="Logo" src="https://github.com/user-attachments/assets/3622f571-a3bb-44c0-b2f1-052446bf8c2e" alt="Exam App Logo" width="140" />
 </p>
 
 <p align="center">
