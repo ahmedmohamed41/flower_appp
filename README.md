@@ -1,8 +1,7 @@
 # 🌸 Flowery App
 
 <p align="center">
-  <img src="<img width="89" height="25" alt="Logo" src="https://github.com/user-attachments/assets/960ffb7c-9110-4656-a816-02d1963c0937" />
-" alt="Flowery App Logo" width="140" />
+  <img src="![Uploading Logo.png…]()" width="30%" />
 </p>
 
 <p align="center">
